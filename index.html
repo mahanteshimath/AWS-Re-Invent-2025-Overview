@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Re:Invent 2025 Learning Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #FF9900;
+            --color-secondary: #232F3E;
+            --color-bg: #FFFFFF;
+            --color-text: #232F3E;
+            --color-light-bg: #F5F5F5;
+            --color-border: #E0E0E0;
+            --color-success: #28a745;
+            --color-info: #0066cc;
+            --color-warning: #ffc107;
+            --radius: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-light-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #415166 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+        }
+
+        .btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius);
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.1);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .service-card {
+            background: var(--color-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: var(--color-primary);
+        }
+
+        .service-header {
+            background: linear-gradient(135deg, #FF9900 0%, #ffa500 100%);
+            color: white;
+            padding: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .service-category {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .service-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin: 10px 0 5px 0;
+        }
+
+        .service-body {
+            padding: 20px;
+        }
+
+        .description {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .use-case-label {
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 0.85em;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .use-case {
+            background-color: var(--color-light-bg);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--color-primary);
+            font-size: 0.9em;
+        }
+
+        .use-case-title {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 4px;
+        }
+
+        .use-case-desc {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .links {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .link-btn {
+            display: inline-block;
+            background-color: var(--color-info);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .link-btn:hover {
+            background-color: #0052a3;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: var(--color-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .filter-chip {
+            display: inline-block;
+            background-color: var(--color-light-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--color-primary);
+            background-color: rgba(255, 153, 0, 0.1);
+        }
+
+        .filter-chip.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .footer {
+            background-color: var(--color-secondary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .accordion-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--color-light-bg);
+            border-radius: 4px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background-color: #e8e8e8;
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 12px;
+            background-color: rgba(0,0,0,0.02);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>☁️ AWS Re:Invent 2025 Learning Hub</h1>
+        <p>Deep dive into the latest AWS announcements from December 2025</p>
+    </div>
+
+    <div class="container">
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Services & Features</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Real-World Use Cases</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="🔍 Search announcements (e.g., Nova, Agents, Bedrock)...">
+        </div>
+
+        <div id="filterContainer"></div>
+
+        <div id="servicesContainer" class="services-grid"></div>
+        <div id="noResults" class="no-results" style="display:none;">
+            <p>No announcements found matching your search. Try a different keyword!</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>AWS Re:Invent 2025 | Learn More at <strong>https://reinvent.awsevents.com</strong></p>
+        <p>Updated: December 4, 2025</p>
+    </div>
+
+    <script>
+        const services = [
+            {
+                id: 1,
+                name: "Amazon Nova 2 Sonic",
+                category: "AI/ML",
+                description: "Advanced speech-to-speech model for conversational AI with multilingual support, dynamic speech control, and improved telephony integration.",
+                useCases: [
+                    { title: "Customer Service AI", desc: "Deploy multilingual voice assistants for 24/7 customer support" },
+                    { title: "Interactive Voice Experiences", desc: "Create natural voice interfaces for smart speakers and devices" },
+                    { title: "Real-time Translation", desc: "Enable live conversation translation across languages" }
+                ],
+                links: [
+                    { text: "Amazon Bedrock Documentation", url: "https://docs.aws.amazon.com/bedrock/" },
+                    { text: "Nova Models Overview", url: "https://aws.amazon.com/bedrock/nova/" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Amazon Nova 2 Lite",
+                category: "AI/ML",
+                description: "Fast, cost-effective reasoning model with extended thinking capabilities, built-in tools, and 1M token context window.",
+                useCases: [
+                    { title: "Edge AI Deployments", desc: "Run inference on edge devices with minimal latency" },
+                    { title: "Cost-Optimized Reasoning", desc: "Process complex logic at fraction of enterprise model costs" },
+                    { title: "Mobile Applications", desc: "Embed AI reasoning directly in mobile apps" }
+                ],
+                links: [
+                    { text: "Nova 2 Lite Specs", url: "https://aws.amazon.com/bedrock/nova/" },
+                    { text: "Model Pricing", url: "https://aws.amazon.com/bedrock/pricing/" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Amazon Nova 2 Omni (Preview)",
+                category: "AI/ML",
+                description: "First multimodal reasoning and generation model supporting text, images, video, and speech inputs with text and image outputs.",
+                useCases: [
+                    { title: "Multimodal Content Analysis", desc: "Analyze videos, images, and text in a single model" },
+                    { title: "Generative AI Content Creation", desc: "Create images and text from mixed media inputs" },
+                    { title: "Visual Search Applications", desc: "Build intelligent search from images and descriptions" }
+                ],
+                links: [
+                    { text: "Nova 2 Omni Preview", url: "https://aws.amazon.com/bedrock/nova/" },
+                    { text: "Multimodal Model Guide", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/multimodal-models.html" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Amazon Nova Forge",
+                category: "AI/ML",
+                description: "New program enabling organizations to build custom frontier models with access to pre-trained checkpoints and proprietary data blending.",
+                useCases: [
+                    { title: "Industry-Specific Models", desc: "Build domain-expert models for healthcare, finance, legal sectors" },
+                    { title: "Enterprise Data Integration", desc: "Combine public models with proprietary business data" },
+                    { title: "Cost Reduction", desc: "Replace multiple specialized models with single custom model" }
+                ],
+                links: [
+                    { text: "Nova Forge Program", url: "https://aws.amazon.com/bedrock/nova/" },
+                    { text: "Custom Model Documentation", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Amazon Nova Act",
+                category: "AI/ML",
+                description: "AI service for building agents that automate browser-based tasks (form filling, search & extract, shopping) with 90%+ enterprise reliability.",
+                useCases: [
+                    { title: "RPA Automation", desc: "Replace manual browser workflows with 90% reliable AI" },
+                    { title: "QA Testing", desc: "Automate UI testing across web applications" },
+                    { title: "E-commerce Automation", desc: "Automate shopping, booking, and checkout workflows" }
+                ],
+                links: [
+                    { text: "Nova Act Documentation", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html" },
+                    { text: "UI Automation Guide", url: "https://aws.amazon.com/bedrock/nova-act/" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Amazon Bedrock AgentCore",
+                category: "AI/ML",
+                description: "Advanced platform for building and deploying AI agents with Policy controls, Evaluations (13 prebuilt), and Episodic Memory.",
+                useCases: [
+                    { title: "Governed AI Agents", desc: "Deploy agents with explicit action boundaries and safety controls" },
+                    { title: "Quality Monitoring", desc: "Continuously assess agent performance across 13 dimensions" },
+                    { title: "Experience-Based Learning", desc: "Agents learn from past interactions to improve decisions" }
+                ],
+                links: [
+                    { text: "AgentCore Documentation", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html" },
+                    { text: "Policy Controls Guide", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/agent-policy.html" }
+                ]
+            },
+            {
+                id: 7,
+                name: "Reinforcement Fine-Tuning (RFT)",
+                category: "AI/ML",
+                description: "New Amazon Bedrock capability using feedback-driven training delivering 66% average accuracy gains without large labeled datasets.",
+                useCases: [
+                    { title: "Model Accuracy Improvement", desc: "Boost model performance from user feedback loops" },
+                    { title: "Low-Data Environments", desc: "Improve models without massive labeled datasets" },
+                    { title: "Iterative Model Refinement", desc: "Continuously improve models based on production data" }
+                ],
+                links: [
+                    { text: "RFT Documentation", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization.html" },
+                    { text: "Fine-Tuning Best Practices", url: "https://docs.aws.amazon.com/bedrock/latest/userguide/fine-tuning-best-practices.html" }
+                ]
+            },
+            {
+                id: 8,
+                name: "Amazon SageMaker AI - Serverless MLflow",
+                category: "AI/ML",
+                description: "Zero-infrastructure MLflow for AI experimentation launching in minutes with automatic scaling and SageMaker integration.",
+                useCases: [
+                    { title: "Rapid Experimentation", desc: "Launch ML experiments without infrastructure setup" },
+                    { title: "Model Tracking", desc: "Track experiments, parameters, and metrics automatically" },
+                    { title: "Team Collaboration", desc: "Share experiments and findings with team members" }
+                ],
+                links: [
+                    { text: "SageMaker MLflow Guide", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html" },
+                    { text: "SageMaker AI Documentation", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/studio.html" }
+                ]
+            },
+            {
+                id: 9,
+                name: "SageMaker Serverless Customization",
+                category: "AI/ML",
+                description: "Accelerated model fine-tuning without infrastructure management, reducing workflows from months to days.",
+                useCases: [
+                    { title: "Quick Model Adaptation", desc: "Fine-tune models for specific domains in days" },
+                    { title: "Cost Optimization", desc: "Pay only for compute during training, not idle time" },
+                    { title: "Rapid Prototyping", desc: "Quickly test custom model variants" }
+                ],
+                links: [
+                    { text: "Serverless Customization Docs", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-custom-models.html" },
+                    { text: "Model Fine-Tuning Guide", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/model-fine-tuning.html" }
+                ]
+            },
+            {
+                id: 10,
+                name: "SageMaker HyperPod - Checkpointless Training",
+                category: "AI/ML",
+                description: "New training features enabling instant recovery from failures and automatic scaling based on resource availability.",
+                useCases: [
+                    { title: "Long-Running Training", desc: "Train large models with automatic failure recovery" },
+                    { title: "Dynamic Resource Scaling", desc: "Automatically scale resources based on demand" },
+                    { title: "Cost Optimization", desc: "Avoid re-training from scratch after failures" }
+                ],
+                links: [
+                    { text: "HyperPod Documentation", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/training.html" },
+                    { text: "Elastic Training Guide", url: "https://docs.aws.amazon.com/sagemaker/latest/dg/elastic-training.html" }
+                ]
+            },
+            {
+                id: 11,
+                name: "AWS Lambda Managed Instances",
+                category: "Compute",
+                description: "Run Lambda on EC2 with serverless simplicity, enabling specialized hardware access and EC2 pricing benefits.",
+                useCases: [
+                    { title: "GPU-Based Processing", desc: "Run Lambda functions on GPU-equipped EC2 instances" },
+                    { title: "High-Performance Computing", desc: "Access more CPU/memory than standard Lambda limits" },
+                    { title: "Cost Optimization", desc: "Leverage EC2 savings plans and reserved instances" }
+                ],
+                links: [
+                    { text: "Lambda Managed Instances", url: "https://docs.aws.amazon.com/lambda/latest/dg/lambda-managed-instances.html" },
+                    { text: "EC2 Integration Guide", url: "https://aws.amazon.com/blogs/compute/aws-lambda-managed-instances/" }
+                ]
+            },
+            {
+                id: 12,
+                name: "AWS Lambda Durable Functions",
+                category: "Compute",
+                description: "Build multi-step applications orchestrating steps over seconds to one year without paying for idle compute.",
+                useCases: [
+                    { title: "Workflow Orchestration", desc: "Coordinate complex multi-step business processes" },
+                    { title: "Long-Running Operations", desc: "Handle workflows spanning days or months" },
+                    { title: "Human-in-Loop Processes", desc: "Pause workflows waiting for human decisions" }
+                ],
+                links: [
+                    { text: "Durable Functions Guide", url: "https://docs.aws.amazon.com/lambda/latest/dg/durable-functions.html" },
+                    { text: "Workflow Patterns", url: "https://docs.aws.amazon.com/lambda/latest/dg/workflows.html" }
+                ]
+            },
+            {
+                id: 13,
+                name: "Amazon EKS Workload Orchestration",
+                category: "Containers",
+                description: "Fully managed Kubernetes capabilities for workload orchestration and cloud resource management.",
+                useCases: [
+                    { title: "Microservices Deployment", desc: "Manage complex microservices without infrastructure maintenance" },
+                    { title: "Multi-Tenant Applications", desc: "Orchestrate workloads for multiple teams/customers" },
+                    { title: "Auto-Scaling Workloads", desc: "Automatically scale based on demand" }
+                ],
+                links: [
+                    { text: "EKS Documentation", url: "https://docs.aws.amazon.com/eks/" },
+                    { text: "Workload Orchestration", url: "https://docs.aws.amazon.com/eks/latest/userguide/workloads.html" }
+                ]
+            },
+            {
+                id: 14,
+                name: "Database Savings Plans",
+                category: "Database",
+                description: "New pricing model maintaining cost efficiency with flexibility across database services and deployment options.",
+                useCases: [
+                    { title: "Cost Reduction", desc: "Save up to 35% on database workloads" },
+                    { title: "Multi-Database Strategy", desc: "Optimize costs across RDS, DynamoDB, and others" },
+                    { title: "Predictable Budgeting", desc: "Lock in predictable database costs" }
+                ],
+                links: [
+                    { text: "Database Savings Plans", url: "https://aws.amazon.com/rds/pricing/reserved-instances/" },
+                    { text: "Pricing Calculator", url: "https://calculator.aws/" }
+                ]
+            },
+            {
+                id: 15,
+                name: "Amazon RDS for SQL Server & Oracle - Enhanced",
+                category: "Database",
+                description: "4x more storage (up to 256 TiB), Optimize CPU feature, M7i/R7i instances, and Developer Edition for SQL Server.",
+                useCases: [
+                    { title: "Large Database Management", desc: "Handle massive databases up to 256 TiB" },
+                    { title: "Development Cost Savings", desc: "Use SQL Server Enterprise features free in development" },
+                    { title: "Performance Optimization", desc: "Reduce costs by 55% with CPU optimization" }
+                ],
+                links: [
+                    { text: "RDS Documentation", url: "https://docs.aws.amazon.com/rds/" },
+                    { text: "SQL Server Developer Edition", url: "https://aws.amazon.com/rds/sqlserver/developer-edition/" }
+                ]
+            },
+            {
+                id: 16,
+                name: "Amazon OpenSearch - GPU Acceleration",
+                category: "Database",
+                description: "Build vector databases 10x faster and at 1/4 cost with GPU acceleration and auto-optimization.",
+                useCases: [
+                    { title: "Vector Search Applications", desc: "Build semantic search with improved performance" },
+                    { title: "RAG Systems", desc: "Accelerate retrieval-augmented generation pipelines" },
+                    { title: "Cost Reduction", desc: "Reduce vector database costs by 75%" }
+                ],
+                links: [
+                    { text: "OpenSearch Documentation", url: "https://docs.aws.amazon.com/opensearch-service/" },
+                    { text: "Vector Search Guide", url: "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/vector-search.html" }
+                ]
+            },
+            {
+                id: 17,
+                name: "Amazon S3 Vector Storage (GA)",
+                category: "Storage",
+                description: "First cloud object storage with native vector data support for storing and querying vector embeddings.",
+                useCases: [
+                    { title: "Vector Database Alternative", desc: "Store vectors in S3 with SQL query capabilities" },
+                    { title: "ML Pipeline Integration", desc: "Integrate vector storage with ML workflows" },
+                    { title: "Cost-Effective Storage", desc: "Store massive vector datasets at S3 scale" }
+                ],
+                links: [
+                    { text: "S3 Tables Documentation", url: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html" },
+                    { text: "Vector Support Guide", url: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/vector-search.html" }
+                ]
+            },
+            {
+                id: 18,
+                name: "Amazon S3 Intelligent-Tiering & Replication",
+                category: "Storage",
+                description: "Automatic cost optimization through intelligent tiering and simplified table replication across Regions and accounts.",
+                useCases: [
+                    { title: "Automatic Cost Savings", desc: "Save 80% on storage through intelligent tiering" },
+                    { title: "Disaster Recovery", desc: "Replicate tables across regions automatically" },
+                    { title: "Data Governance", desc: "Ensure compliance with data residency requirements" }
+                ],
+                links: [
+                    { text: "S3 Intelligent-Tiering", url: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html" },
+                    { text: "S3 Replication", url: "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html" }
+                ]
+            },
+            {
+                id: 19,
+                name: "AWS CloudWatch Unified Data Store",
+                category: "Management",
+                description: "Unified data management for operations, security, compliance with automatic normalization and S3 Tables integration.",
+                useCases: [
+                    { title: "Cost Reduction", desc: "Reduce data management complexity and logging costs" },
+                    { title: "Security Compliance", desc: "Centralize logs for compliance monitoring" },
+                    { title: "Advanced Analytics", desc: "Query logs with built-in analytics" }
+                ],
+                links: [
+                    { text: "CloudWatch Documentation", url: "https://docs.aws.amazon.com/cloudwatch/" },
+                    { text: "Logs Insights", url: "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html" }
+                ]
+            },
+            {
+                id: 20,
+                name: "AWS DevOps Agent (Preview)",
+                category: "Management",
+                description: "Autonomous on-call engineer analyzing data across CloudWatch, GitHub, ServiceNow for incident response.",
+                useCases: [
+                    { title: "Incident Resolution", desc: "Automatically identify and resolve incidents 24/7" },
+                    { title: "Root Cause Analysis", desc: "Find root causes across multiple systems" },
+                    { title: "On-Call Efficiency", desc: "Reduce MTTR and human on-call burden" }
+                ],
+                links: [
+                    { text: "DevOps Agent Preview", url: "https://aws.amazon.com/devops/devops-agent/" },
+                    { text: "Incident Management Guide", url: "https://docs.aws.amazon.com/systems-manager/" }
+                ]
+            },
+            {
+                id: 21,
+                name: "AWS Security Agent (Preview)",
+                category: "Security",
+                description: "AI-powered security with design reviews, code analysis, and contextual penetration testing.",
+                useCases: [
+                    { title: "AppSec Automation", desc: "Scale application security without hiring security experts" },
+                    { title: "Early Vulnerability Detection", desc: "Find security issues at design and code stages" },
+                    { title: "Compliance Automation", desc: "Ensure compliance throughout development" }
+                ],
+                links: [
+                    { text: "AWS Security Agent", url: "https://aws.amazon.com/blogs/security/" },
+                    { text: "Application Security", url: "https://docs.aws.amazon.com/appsec/" }
+                ]
+            },
+            {
+                id: 22,
+                name: "Amazon GuardDuty Extended Threat Detection",
+                category: "Security",
+                description: "Unified threat detection for EC2 and ECS with AI/ML models to correlate attack sequences.",
+                useCases: [
+                    { title: "Container Security", desc: "Detect threats in containerized workloads" },
+                    { title: "Multi-Stage Attack Detection", desc: "Correlate signals to detect complex attacks" },
+                    { title: "MITRE ATT&CK Mapping", desc: "Understand threat tactics and techniques" }
+                ],
+                links: [
+                    { text: "GuardDuty Documentation", url: "https://docs.aws.amazon.com/guardduty/" },
+                    { text: "Extended Threat Detection", url: "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty-findings-summary.html" }
+                ]
+            },
+            {
+                id: 23,
+                name: "AWS Security Hub (GA)",
+                category: "Security",
+                description: "Unified security operations with near real-time analytics and risk prioritization.",
+                useCases: [
+                    { title: "Centralized Security Visibility", desc: "View all security findings in one place" },
+                    { title: "Risk Prioritization", desc: "Focus on high-impact security issues first" },
+                    { title: "Compliance Reporting", desc: "Generate compliance reports automatically" }
+                ],
+                links: [
+                    { text: "Security Hub Documentation", url: "https://docs.aws.amazon.com/securityhub/" },
+                    { text: "Controls Documentation", url: "https://docs.aws.amazon.com/securityhub/latest/userguide/controls.html" }
+                ]
+            },
+            {
+                id: 24,
+                name: "AWS Transform - AI Code Modernization",
+                category: "Migration",
+                description: "AI-powered service learning organizational patterns to automate transformations reducing execution time by 80%.",
+                useCases: [
+                    { title: "Legacy System Migration", desc: "Modernize enterprise applications at scale" },
+                    { title: "Tech Debt Reduction", desc: "Automate code updates across repositories" },
+                    { title: "Windows Modernization", desc: "Modernize .NET, SQL Server, and UI frameworks" }
+                ],
+                links: [
+                    { text: "AWS Transform Documentation", url: "https://docs.aws.amazon.com/prescriptive-guidance/" },
+                    { text: "Application Modernization", url: "https://aws.amazon.com/application-transformation/" }
+                ]
+            },
+            {
+                id: 25,
+                name: "AWS AI Factories",
+                category: "Infrastructure",
+                description: "Fully managed AI infrastructure with foundation models in enterprise data centers meeting data residency requirements.",
+                useCases: [
+                    { title: "On-Premises AI", desc: "Run AI models in your own data centers" },
+                    { title: "Data Sovereignty", desc: "Meet government data residency requirements" },
+                    { title: "Hybrid AI Deployment", desc: "Combine cloud and on-premises AI" }
+                ],
+                links: [
+                    { text: "AWS AI Factories", url: "https://aws.amazon.com/about-aws/whats-new/2025/12/aws-ai-factories/" },
+                    { text: "Hybrid Cloud Guide", url: "https://aws.amazon.com/hybrid/" }
+                ]
+            },
+            {
+                id: 26,
+                name: "Trainium3 UltraServers",
+                category: "Infrastructure",
+                description: "Advanced Trainium3 chip offering 4.4x compute performance, 4x energy efficiency, 4x memory bandwidth.",
+                useCases: [
+                    { title: "Faster Model Training", desc: "Train large models 4.4x faster than previous generation" },
+                    { title: "Cost Efficiency", desc: "Reduce training costs with 4x energy efficiency" },
+                    { title: "Production Inference", desc: "Reduce inference latency and costs" }
+                ],
+                links: [
+                    { text: "Trainium Documentation", url: "https://docs.aws.amazon.com/neuron/" },
+                    { text: "AI Accelerators", url: "https://aws.amazon.com/ec2/accelerators/" }
+                ]
+            },
+            {
+                id: 27,
+                name: "Trainium4 (Preview)",
+                category: "Infrastructure",
+                description: "Next-generation AI chip promising 6x processing performance and 3x FP8 performance.",
+                useCases: [
+                    { title: "Next-Gen Model Training", desc: "Future-proof AI training infrastructure" },
+                    { title: "Advanced AI Workloads", desc: "Support emerging model architectures" },
+                    { title: "Competitive Advantage", desc: "Early access to advanced hardware" }
+                ],
+                links: [
+                    { text: "AI Chip Roadmap", url: "https://aws.amazon.com/ec2/accelerators/" },
+                    { text: "Trainium4 Preview", url: "https://aws.amazon.com/about-aws/whats-new/2025/12/aws-trainium4-preview/" }
+                ]
+            },
+            {
+                id: 28,
+                name: "Amazon Route 53 Global Resolver",
+                category: "Networking",
+                description: "Secure anycast DNS resolution for hybrid DNS management with unified service.",
+                useCases: [
+                    { title: "Hybrid Cloud DNS", desc: "Resolve DNS across cloud and on-premises" },
+                    { title: "Global Load Balancing", desc: "Route traffic based on location and health" },
+                    { title: "Security Zones", desc: "Enforce DNS security policies globally" }
+                ],
+                links: [
+                    { text: "Route 53 Documentation", url: "https://docs.aws.amazon.com/route53/" },
+                    { text: "Resolver Guide", url: "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html" }
+                ]
+            },
+            {
+                id: 29,
+                name: "New AWS Support Plans - AI-Powered",
+                category: "Support",
+                description: "Enhanced support with AI insights, 2x faster response times (30 min for critical), and automated triage.",
+                useCases: [
+                    { title: "Faster Issue Resolution", desc: "Get expert help within 30 minutes for critical issues" },
+                    { title: "Proactive Monitoring", desc: "AI identifies issues before they impact users" },
+                    { title: "Cost Optimization", desc: "AI recommendations reduce AWS spending" }
+                ],
+                links: [
+                    { text: "AWS Support Plans", url: "https://aws.amazon.com/support/plans/" },
+                    { text: "Support Pricing", url: "https://aws.amazon.com/support/pricing/" }
+                ]
+            },
+            {
+                id: 30,
+                name: "IAM Policy Autopilot",
+                category: "Security",
+                description: "Open source MCP server analyzing code to generate valid IAM policies with AI coding assistants.",
+                useCases: [
+                    { title: "Policy Generation", desc: "Automatically generate least-privilege IAM policies" },
+                    { title: "Security Best Practices", desc: "Ensure IAM follows security principles" },
+                    { title: "Developer Productivity", desc: "Reduce policy creation time for developers" }
+                ],
+                links: [
+                    { text: "IAM Policy Autopilot GitHub", url: "https://github.com/aws" },
+                    { text: "IAM Documentation", url: "https://docs.aws.amazon.com/iam/" }
+                ]
+            }
+        ];
+
+        const categories = [...new Set(services.map(s => s.category))].sort();
+
+        function renderServices(filteredServices = services) {
+            const container = document.getElementById('servicesContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (filteredServices.length === 0) {
+                container.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            container.innerHTML = filteredServices.map(service => `
+                <div class="service-card">
+                    <div class="service-header">
+                        <div>
+                            <div class="service-category">${service.category}</div>
+                            <div class="service-title">${service.name}</div>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="description">${service.description}</div>
+                        <div class="use-case-label">💡 Real-World Use Cases:</div>
+                        ${service.useCases.map(uc => `
+                            <div class="use-case">
+                                <div class="use-case-title">${uc.title}</div>
+                                <div class="use-case-desc">${uc.desc}</div>
+                            </div>
+                        `).join('')}
+                        <div class="links">
+                            ${service.links.map(link => `
+                                <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="link-btn">📚 ${link.text}</a>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('filterContainer');
+            container.innerHTML = '<div style="margin: 20px 0;">' +
+                categories.map(cat => `
+                    <span class="filter-chip" data-category="${cat}" onclick="filterByCategory(this)">${cat}</span>
+                `).join('') +
+                '<span class="filter-chip" onclick="clearFilters(this)">Clear All</span>' +
+                '</div>';
+        }
+
+        function filterServices() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const activeFilters = Array.from(document.querySelectorAll('.filter-chip.active')).map(el => el.dataset.category);
+
+            return services.filter(service => {
+                const matchesSearch = service.name.toLowerCase().includes(search) ||
+                    service.description.toLowerCase().includes(search) ||
+                    service.useCases.some(uc => uc.title.toLowerCase().includes(search) || uc.desc.toLowerCase().includes(search));
+
+                const matchesCategory = activeFilters.length === 0 || activeFilters.includes(service.category);
+
+                return matchesSearch && matchesCategory;
+            });
+        }
+
+        function filterByCategory(element) {
+            element.classList.toggle('active');
+            renderServices(filterServices());
+        }
+
+        function clearFilters(element) {
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            document.getElementById('searchInput').value = '';
+            renderServices(services);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderServices(filterServices());
+        });
+
+        // Initial render
+        renderFilters();
+        renderServices();
+    </script>
+</body>
+</html>
